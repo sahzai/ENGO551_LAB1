@@ -1,35 +1,41 @@
 {% block body %}
-      {% if search %}
-      <h2>Book information for ISBN: {{ message }}</h2>
-        <ul>
-          {% for result in results %}
-             <li>{{ result }}</li>
-          {% endfor %}
-        </ul>
-      <ul>
-             <li>Title: {{ book_result[0][2] }}</li>
-             <li>Author: {{ book_result[0][3] }}</li>
-             <li>Year: {{ book_result[0][4] }}</li>
-      </ul>
-      <h6>{{ reviews }}</h6>
-      <ul>
-            {% for book_review in book_reviews %}
-             <li>Review from {{ book_review[0] }}: {{ book_review[1] }} - {{book_review[2] }}. </li>
-          {% endfor %}
-        </ul>
-      <br>
-      <form  method="post">
-        <div>
-            Rating (between 1 and 5):  <input type="number" name="rating" min="1" max="5" default="0" required>
-            <input class="form-control" type="text" name="comment" placeholder="Your comments..." required>
-        </div>
-        <div>
-            <button class="btn btn-primary">Submit</button>
-        </div>
+    {% if search %}
+    <h1>Book Information</h1>
+    <p>Title: {{ book_result[0][1] }}</p>
+    <p>Author: {{ book_result[0][2] }}</p>
+    <p>Year: {{ book_result[0][3] }}</p>
+    
+    <h2>Book Reviews</h2>
+    <ul>
+        {% for review in book_reviews %}
+            <li>{{ review.username }} - {{ review.rating }} - {{ review.comment }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Google Reviews</h2>
+    <ul>
+        {% if average_rating %}
+            <li>Average Rating: {{ average_rating }}</li>
+            <li>Ratings Count: {{ rating_count }}</li>
+        {% else %}
+            <li>No Google reviews available</li>
+        {% endif %}
+    </ul>
+
+        <br>
+        <form method="POST">
+          <label for="rating">Rating (between 1 and 5):</label>
+          <input type="number" id="rating" name="rating" min="1" max="5" required>
+          <br>
+          <label for="comment">Comment:</label>
+          <textarea id="comment" name="comment" required></textarea>
+          <br>
+          <input type="submit" value="Submit Review">
       </form>
-      {% endif %}
-      {% if not search %}
-      <h2>You are not logged in!</h2>
-      <h5>please login first</h5>
-      {% endif %}
+    {% endif %}
+
+    {% if not search %}
+        <h2>You are not logged in!</h2>
+        <h5>Please login first</h5>
+    {% endif %}
 {% endblock %}
